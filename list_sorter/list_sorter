@@ -1,1 +1,96 @@
 #!/usr/bin/env python
+
+
+class ListSorter:
+    def __init__(self):
+        pass
+
+    def sort_list(self, _input):
+        sorter = _input.split()[0].lower()
+        d_str = _input.split()[1]
+        d_str2list = d_str.split(",")
+        min_value_list = []
+
+        for sub_str in d_str2list:
+            min_value_str = self.get_min_value_str(sub_str)
+            min_value_list.append(min_value_str)
+        print min_value_list
+        output_list = self.sort_list_by_value(min_value_list, sorter)
+
+        _output = "" + ",".join(output_list)
+        return _output
+
+    def sort_list_by_value(self, d_list, d_sorter):
+        del_list = []
+        normal_list = []
+        add_list = []
+
+        for item in d_list:
+            if "-" in item:
+                del_list.append(item)
+            elif "+" in item:
+                add_list.append(item)
+            else:
+                normal_list.append(item)
+
+        del_list.sort(cmp=self.compare_value)
+        normal_list.sort(cmp=self.compare_value)
+        add_list.sort(cmp=self.compare_value)
+
+        if len(add_list) > 0:
+            for i, x in enumerate(add_list):
+                for index, y in enumerate(normal_list):
+                    if long(x) < long(y):
+                        normal_list.insert(index, x)
+                        add_list.pop(i)
+                        break
+            # if lef in add_list, there are some more large value than normal largest value
+            if len(add_list) > 0:
+                normal_list += add_list
+
+        sorted_list = del_list + normal_list
+        if d_sorter == "desc":
+            sorted_list.reverse()
+
+        return sorted_list
+
+    @staticmethod
+    def get_min_value_str(d_str):
+        if "-" in d_str:
+            new_str = d_str.strip("-")
+            str_list = list(new_str)
+            str_list.sort(reverse=True)
+            min_value_str = "-" + "".join(str_list)
+        else:
+            new_str = d_str.strip("+")
+            str_list = list(new_str)
+            str_list.sort()
+            if str_list[0] == "0":
+                for index, d in enumerate(str_list):
+                    if d != "0":
+                        # d_tmp = str_list[0]
+                        str_list[0] = d
+                        str_list[index] = "0"
+                        break
+            if "+" in d_str:
+                min_value_str = "+" + "".join(str_list)
+            else:
+                min_value_str = "" + "".join(str_list)
+        return min_value_str
+
+    @staticmethod
+    def compare_value(a, b):
+        if long(a) > long(b):
+            return 1
+        elif long(a) < long(b):
+            return -1
+        else:
+            return 0
+
+if __name__ == "__main__":
+    Sorter = ListSorter()
+    d_input = "aesc 10,-798,-0,-000,000,23,+600,120035,0,+00,+3056721"
+    print "sorter:" + d_input.split()[0]
+    print "in_put:" + d_input.split()[1]
+    d_output = Sorter.sort_list(d_input)
+    print "output:" + d_output
