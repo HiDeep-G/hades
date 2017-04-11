@@ -14,10 +14,9 @@ class ListSorter:
         for sub_str in d_str2list:
             min_value_str = self.get_min_value_str(sub_str)
             min_value_list.append(min_value_str)
-        print min_value_list
         output_list = self.sort_list_by_value(min_value_list, sorter)
 
-        _output = "" + ",".join(output_list)
+        _output = ",".join(output_list)
         return _output
 
     def sort_list_by_value(self, d_list, d_sorter):
