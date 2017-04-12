@@ -20,6 +20,9 @@ class ListSorter:
         return _output
 
     def sort_list_by_value(self, d_list, d_sorter):
+        #这里选择将+ -的类型分开，为保持-0显示在0的左边，+0显示在0的邮编
+        #当然0没有+ -的意义，如果你愿意这样写，我就给你好看点
+        #也可以选择不区分，直接比较long（）值大小
         del_list = []
         normal_list = []
         add_list = []
